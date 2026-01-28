@@ -1,0 +1,6 @@
+@VacacionesBancodeAlimentos_HostAddress = http://localhost:5289
+
+GET {{VacacionesBancodeAlimentos_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

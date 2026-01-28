@@ -1,0 +1,447 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "VacacionesBancodeAlimentos",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/Calculo/GetCalculo": {
+      "get": {
+        "tags": [
+          "Calculo"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Calculo/PostCalculo": {
+      "post": {
+        "tags": [
+          "Calculo"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Calculo"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Calculo"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Calculo"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Diccionario/GetDiccionario": {
+      "get": {
+        "tags": [
+          "Diccionario"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Diccionario/PostDiccionario": {
+      "post": {
+        "tags": [
+          "Diccionario"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiccionarioFechas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiccionarioFechas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiccionarioFechas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Diccionario/DeleteDiccionario/{id}": {
+      "delete": {
+        "tags": [
+          "Diccionario"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Solicitud/GetSolicitudes": {
+      "get": {
+        "tags": [
+          "Solicitud"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Solicitud/NewSolicitud": {
+      "post": {
+        "tags": [
+          "Solicitud"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Solicitud"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Solicitud"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Solicitud"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Solicitud/UpdateSolicitud/{id}/{estatus}": {
+      "put": {
+        "tags": [
+          "Solicitud"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "estatus",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Solicitud/UpdateFormato/{id}/{formato}": {
+      "put": {
+        "tags": [
+          "Solicitud"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "formato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Vacaciones/GetVacaciones": {
+      "get": {
+        "tags": [
+          "Vacaciones"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Calculo": {
+        "required": [
+          "anioMax",
+          "anioMin",
+          "dias",
+          "indice"
+        ],
+        "type": "object",
+        "properties": {
+          "indice": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "anioMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "anioMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dias": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiccionarioFechas": {
+        "required": [
+          "fecha",
+          "idFecha",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "idFecha": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Empleado": {
+        "type": "object",
+        "properties": {
+          "idEmpleado": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "puesto": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "departamento": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "fechaIngreso": {
+            "type": "string",
+            "format": "date"
+          },
+          "vacaciones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vacaciones"
+            },
+            "nullable": true
+          },
+          "solicitud": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Solicitud"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Solicitud": {
+        "required": [
+          "estatus",
+          "fechaPeticion",
+          "idEmpleado",
+          "idSolicitud"
+        ],
+        "type": "object",
+        "properties": {
+          "idSolicitud": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEmpleado": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "formato": {
+            "type": "string",
+            "nullable": true
+          },
+          "estatus": {
+            "type": "string"
+          },
+          "fechaPeticion": {
+            "type": "string",
+            "format": "date"
+          },
+          "empleado": {
+            "$ref": "#/components/schemas/Empleado"
+          },
+          "solicitudFechas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SolicitudFecha"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SolicitudFecha": {
+        "required": [
+          "fecha",
+          "idSolicitud"
+        ],
+        "type": "object",
+        "properties": {
+          "idSolicitud": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "solicitud": {
+            "$ref": "#/components/schemas/Solicitud"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vacaciones": {
+        "required": [
+          "anio",
+          "diasTotales",
+          "idEmpleado"
+        ],
+        "type": "object",
+        "properties": {
+          "idEmpleado": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "anio": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "diasTotales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empleado": {
+            "$ref": "#/components/schemas/Empleado"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Calculo"
+    },
+    {
+      "name": "Diccionario"
+    },
+    {
+      "name": "Solicitud"
+    },
+    {
+      "name": "Vacaciones"
+    }
+  ]
+}

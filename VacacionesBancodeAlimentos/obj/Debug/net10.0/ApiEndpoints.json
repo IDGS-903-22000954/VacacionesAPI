@@ -1,0 +1,148 @@
+[
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.CalculoController",
+    "Method": "Get",
+    "RelativePath": "api/Calculo/GetCalculo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.CalculoController",
+    "Method": "Update",
+    "RelativePath": "api/Calculo/PostCalculo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Request",
+        "Type": "System.Collections.Generic.List\u00601[[VacacionesBancodeAlimentos.Model.Calculo, VacacionesBancodeAlimentos, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.DiccionarioController",
+    "Method": "Delete",
+    "RelativePath": "api/Diccionario/DeleteDiccionario/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.DiccionarioController",
+    "Method": "Get",
+    "RelativePath": "api/Diccionario/GetDiccionario",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.DiccionarioController",
+    "Method": "Post",
+    "RelativePath": "api/Diccionario/PostDiccionario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Fecha",
+        "Type": "VacacionesBancodeAlimentos.Model.DiccionarioFechas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "Get",
+    "RelativePath": "api/Solicitud/GetSolicitudes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "NewSolicitud",
+    "RelativePath": "api/Solicitud/NewSolicitud",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitud",
+        "Type": "VacacionesBancodeAlimentos.Model.Solicitud",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "UpdateFormato",
+    "RelativePath": "api/Solicitud/UpdateFormato/{id}/{formato}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "formato",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "UpdateSolicitud",
+    "RelativePath": "api/Solicitud/UpdateSolicitud/{id}/{estatus}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "estatus",
+        "Type": "System.Char",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.VacacionesController",
+    "Method": "GetVacaciones",
+    "RelativePath": "api/Vacaciones/GetVacaciones",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
