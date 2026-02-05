@@ -160,3 +160,4 @@ Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\refin
 Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\VacacionesBancodeAlimentos.pdb
 Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\VacacionesBancodeAlimentos.genruntimeconfig.cache
 Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\ref\VacacionesBancodeAlimentos.dll
+Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\VacacionesBancodeAlimentos.sourcelink.json

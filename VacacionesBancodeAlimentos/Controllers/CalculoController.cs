@@ -24,8 +24,8 @@ namespace VacacionesBancodeAlimentos.Controllers
             return Ok(calculos);
         }
 
-        [HttpPost]
-        [Route("PostCalculo")]
+        [HttpPut]
+        [Route("PutCalculo")]
         public async Task<IActionResult> Update([FromBody] List<Calculo> Request)
         {
             await _context.Calculos.ExecuteDeleteAsync();

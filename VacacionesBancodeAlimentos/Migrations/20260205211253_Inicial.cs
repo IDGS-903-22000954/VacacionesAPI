@@ -27,33 +27,16 @@ namespace VacacionesBancodeAlimentos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "diccionarioFechas",
+                name: "diccionarioAsuetos",
                 columns: table => new
                 {
                     idFecha = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    fecha = table.Column<DateOnly>(type: "date", nullable: false)
+                    nombre = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_diccionarioFechas", x => x.idFecha);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Empleado",
-                columns: table => new
-                {
-                    IdEmpleado = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Puesto = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Departamento = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    FechaIngreso = table.Column<DateOnly>(type: "date", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Empleado", x => x.IdEmpleado);
+                    table.PrimaryKey("PK_diccionarioAsuetos", x => x.idFecha);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,30 +53,39 @@ namespace VacacionesBancodeAlimentos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_solicitudes", x => x.idSolicitud);
-                    table.ForeignKey(
-                        name: "FK_solicitudes_Empleado_empleadoId",
-                        column: x => x.empleadoId,
-                        principalTable: "Empleado",
-                        principalColumn: "IdEmpleado",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "vacaciones",
                 columns: table => new
                 {
-                    empleadoId = table.Column<int>(type: "int", nullable: false),
+                    empleadoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     anio = table.Column<int>(type: "int", nullable: false),
                     diasTotales = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_vacaciones", x => x.empleadoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "asuetosFechas",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    fechaId = table.Column<int>(type: "int", nullable: false),
+                    fecha = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_asuetosFechas", x => x.id);
                     table.ForeignKey(
-                        name: "FK_vacaciones_Empleado_empleadoId",
-                        column: x => x.empleadoId,
-                        principalTable: "Empleado",
-                        principalColumn: "IdEmpleado",
+                        name: "FK_asuetosFechas_diccionarioAsuetos_fechaId",
+                        column: x => x.fechaId,
+                        principalTable: "diccionarioAsuetos",
+                        principalColumn: "idFecha",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -116,19 +108,19 @@ namespace VacacionesBancodeAlimentos.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_solicitudes_empleadoId",
-                table: "solicitudes",
-                column: "empleadoId");
+                name: "IX_asuetosFechas_fechaId",
+                table: "asuetosFechas",
+                column: "fechaId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "calculos");
+                name: "asuetosFechas");
 
             migrationBuilder.DropTable(
-                name: "diccionarioFechas");
+                name: "calculos");
 
             migrationBuilder.DropTable(
                 name: "solicitudesFechas");
@@ -137,10 +129,10 @@ namespace VacacionesBancodeAlimentos.Migrations
                 name: "vacaciones");
 
             migrationBuilder.DropTable(
-                name: "solicitudes");
+                name: "diccionarioAsuetos");
 
             migrationBuilder.DropTable(
-                name: "Empleado");
+                name: "solicitudes");
         }
     }
 }

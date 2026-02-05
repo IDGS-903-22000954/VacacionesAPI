@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VacacionesBancodeAlimentos.Model
 {
+    [NotMapped]
     public class Empleado
     {
         [Key]

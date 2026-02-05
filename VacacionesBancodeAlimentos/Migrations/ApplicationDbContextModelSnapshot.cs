@@ -22,6 +22,30 @@ namespace VacacionesBancodeAlimentos.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.AsuetosFechas", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("date")
+                        .HasColumnName("fecha");
+
+                    b.Property<int>("IdFecha")
+                        .HasColumnType("int")
+                        .HasColumnName("fechaId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdFecha");
+
+                    b.ToTable("asuetosFechas", (string)null);
+                });
+
             modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Calculo", b =>
                 {
                     b.Property<int>("Indice")
@@ -48,7 +72,7 @@ namespace VacacionesBancodeAlimentos.Migrations
                     b.ToTable("calculos", (string)null);
                 });
 
-            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.DiccionarioFechas", b =>
+            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.DiccionarioAsuetos", b =>
                 {
                     b.Property<int>("IdFecha")
                         .ValueGeneratedOnAdd()
@@ -57,10 +81,6 @@ namespace VacacionesBancodeAlimentos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFecha"));
 
-                    b.Property<DateOnly>("Fecha")
-                        .HasColumnType("date")
-                        .HasColumnName("fecha");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -68,38 +88,7 @@ namespace VacacionesBancodeAlimentos.Migrations
 
                     b.HasKey("IdFecha");
 
-                    b.ToTable("diccionarioFechas", (string)null);
-                });
-
-            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Empleado", b =>
-                {
-                    b.Property<int>("IdEmpleado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpleado"));
-
-                    b.Property<string>("Departamento")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<DateOnly>("FechaIngreso")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Puesto")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("IdEmpleado");
-
-                    b.ToTable("Empleado");
+                    b.ToTable("diccionarioAsuetos", (string)null);
                 });
 
             modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Solicitud", b =>
@@ -131,8 +120,6 @@ namespace VacacionesBancodeAlimentos.Migrations
 
                     b.HasKey("IdSolicitud");
 
-                    b.HasIndex("IdEmpleado");
-
                     b.ToTable("solicitudes", (string)null);
                 });
 
@@ -154,8 +141,11 @@ namespace VacacionesBancodeAlimentos.Migrations
             modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Vacaciones", b =>
                 {
                     b.Property<int>("IdEmpleado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("empleadoId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpleado"));
 
                     b.Property<int>("Anio")
                         .HasColumnType("int")
@@ -170,15 +160,15 @@ namespace VacacionesBancodeAlimentos.Migrations
                     b.ToTable("vacaciones", (string)null);
                 });
 
-            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Solicitud", b =>
+            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.AsuetosFechas", b =>
                 {
-                    b.HasOne("VacacionesBancodeAlimentos.Model.Empleado", "Empleado")
-                        .WithMany("Solicitud")
-                        .HasForeignKey("IdEmpleado")
+                    b.HasOne("VacacionesBancodeAlimentos.Model.DiccionarioAsuetos", "DiccionarioAsuetos")
+                        .WithMany("AsuetosFechas")
+                        .HasForeignKey("IdFecha")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Empleado");
+                    b.Navigation("DiccionarioAsuetos");
                 });
 
             modelBuilder.Entity("VacacionesBancodeAlimentos.Model.SolicitudFecha", b =>
@@ -192,22 +182,9 @@ namespace VacacionesBancodeAlimentos.Migrations
                     b.Navigation("Solicitud");
                 });
 
-            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Vacaciones", b =>
+            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.DiccionarioAsuetos", b =>
                 {
-                    b.HasOne("VacacionesBancodeAlimentos.Model.Empleado", "Empleado")
-                        .WithMany("Vacaciones")
-                        .HasForeignKey("IdEmpleado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empleado");
-                });
-
-            modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Empleado", b =>
-                {
-                    b.Navigation("Solicitud");
-
-                    b.Navigation("Vacaciones");
+                    b.Navigation("AsuetosFechas");
                 });
 
             modelBuilder.Entity("VacacionesBancodeAlimentos.Model.Solicitud", b =>

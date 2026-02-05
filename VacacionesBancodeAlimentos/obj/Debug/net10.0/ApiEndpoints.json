@@ -12,8 +12,8 @@
   {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.CalculoController",
     "Method": "Update",
-    "RelativePath": "api/Calculo/PostCalculo",
-    "HttpMethod": "POST",
+    "RelativePath": "api/Calculo/PutCalculo",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -60,8 +60,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Fecha",
-        "Type": "VacacionesBancodeAlimentos.Model.DiccionarioFechas",
+        "Name": "diccionario",
+        "Type": "VacacionesBancodeAlimentos.Model.DiccionarioAsuetos",
         "IsRequired": true
       }
     ],

@@ -15,6 +15,6 @@ namespace VacacionesBancodeAlimentos.Model
         public DateOnly Fecha { get; set; }
 
         [ForeignKey("IdSolicitud")]
-        public Solicitud Solicitud { get; set; }
+        public Solicitud? Solicitud { get; set; }
     }
 }

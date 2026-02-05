@@ -23,7 +23,7 @@ namespace VacacionesBancodeAlimentos.Model
         public DateOnly FechaPeticion {  get; set; }
 
         [ForeignKey("IdEmpleado")]
-        public Empleado Empleado { get; set; }
+        public Empleado? Empleado { get; set; }
 
         public ICollection<SolicitudFecha> SolicitudFechas { get; set; }
 

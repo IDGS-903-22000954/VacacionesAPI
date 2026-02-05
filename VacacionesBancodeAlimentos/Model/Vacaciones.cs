@@ -18,6 +18,6 @@ namespace VacacionesBancodeAlimentos.Model
         public int DiasTotales { get; set; }
 
         [ForeignKey("IdEmpleado")]
-        public Empleado Empleado { get; set; }
+        public Empleado? Empleado { get; set; }
     }
 }

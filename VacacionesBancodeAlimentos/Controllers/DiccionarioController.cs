@@ -20,15 +20,15 @@ namespace VacacionesBancodeAlimentos.Controllers
         [Route("GetDiccionario")]
         public async Task<IActionResult> Get()
         {
-            var Diccionarios = await _context.DiccionarioFechas.ToListAsync();
+            var Diccionarios = await _context.DiccionarioAsuetos.ToListAsync();
             return Ok(Diccionarios);
         }
 
         [HttpPost]
         [Route("PostDiccionario")]
-        public async Task<IActionResult> Post([FromBody] DiccionarioFechas Fecha)
+        public async Task<IActionResult> Post([FromBody] DiccionarioAsuetos diccionario)
         {
-            await _context.DiccionarioFechas.AddAsync(Fecha);
+            await _context.DiccionarioAsuetos.AddAsync(diccionario);
             await _context.SaveChangesAsync();
 
             return Ok("Fecha agregada con éxito");
@@ -38,13 +38,13 @@ namespace VacacionesBancodeAlimentos.Controllers
         [Route("DeleteDiccionario/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var FechaEliminar = await _context.DiccionarioFechas.FindAsync(id);
+            var FechaEliminar = await _context.DiccionarioAsuetos.FindAsync(id);
             if (FechaEliminar == null)
             {
                 return BadRequest("No existe esa fecha");
             }
 
-            _context.DiccionarioFechas.Remove(FechaEliminar);
+            _context.DiccionarioAsuetos.Remove(FechaEliminar);
             await _context.SaveChangesAsync();
 
             return Ok("Fecha eliminada con éxito");

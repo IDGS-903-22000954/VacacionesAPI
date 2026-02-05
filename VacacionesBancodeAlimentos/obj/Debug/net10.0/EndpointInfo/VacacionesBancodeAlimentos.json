@@ -17,8 +17,8 @@
         }
       }
     },
-    "/api/Calculo/PostCalculo": {
-      "post": {
+    "/api/Calculo/PutCalculo": {
+      "put": {
         "tags": [
           "Calculo"
         ],
@@ -78,17 +78,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DiccionarioFechas"
+                "$ref": "#/components/schemas/DiccionarioAsuetos"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/DiccionarioFechas"
+                "$ref": "#/components/schemas/DiccionarioAsuetos"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/DiccionarioFechas"
+                "$ref": "#/components/schemas/DiccionarioAsuetos"
               }
             }
           }
@@ -243,6 +243,32 @@
   },
   "components": {
     "schemas": {
+      "AsuetosFechas": {
+        "required": [
+          "fecha",
+          "id",
+          "idFecha"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idFecha": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "diccionarioAsuetos": {
+            "$ref": "#/components/schemas/DiccionarioAsuetos"
+          }
+        },
+        "additionalProperties": false
+      },
       "Calculo": {
         "required": [
           "anioMax",
@@ -271,9 +297,8 @@
         },
         "additionalProperties": false
       },
-      "DiccionarioFechas": {
+      "DiccionarioAsuetos": {
         "required": [
-          "fecha",
           "idFecha",
           "nombre"
         ],
@@ -287,9 +312,12 @@
             "minLength": 1,
             "type": "string"
           },
-          "fecha": {
-            "type": "string",
-            "format": "date"
+          "asuetosFechas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AsuetosFechas"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
