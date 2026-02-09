@@ -20,9 +20,21 @@ namespace VacacionesBancodeAlimentos.Controllers
         [Route("GetDiccionario")]
         public async Task<IActionResult> Get()
         {
-            var Diccionarios = await _context.DiccionarioAsuetos.ToListAsync();
-            return Ok(Diccionarios);
+            var diccionarios = await _context.DiccionarioAsuetos
+                .Include(d => d.AsuetosFechas)
+                .Select(d => new {
+                    d.IdFecha,
+                    d.Nombre,
+                    Fechas = d.AsuetosFechas.Select(f => new {
+                        f.Id,
+                        f.Fecha
+                    })
+                })
+                .ToListAsync();
+
+            return Ok(diccionarios);
         }
+
 
         [HttpPost]
         [Route("PostDiccionario")]
