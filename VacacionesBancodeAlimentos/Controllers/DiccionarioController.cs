@@ -46,6 +46,29 @@ namespace VacacionesBancodeAlimentos.Controllers
             return Ok("Fecha agregada con éxito");
         }
 
+        [HttpPut]
+        [Route("PutDiccionario/{id:int}")]
+        public async Task<IActionResult> Put([FromBody] string nombre, int id)
+        {
+            var asuetoExistente = await _context.DiccionarioAsuetos.FindAsync(id);
+            if (asuetoExistente == null)
+            {
+                return NotFound("No se encontró el asueto.");
+            }
+
+            asuetoExistente.Nombre = nombre;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            } catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error al actualizar el registro.");
+            }
+
+            return Ok("Asueto Actualizado con éxito");
+        }
+
         [HttpDelete]
         [Route("DeleteDiccionario/{id:int}")]
         public async Task<IActionResult> Delete(int id)

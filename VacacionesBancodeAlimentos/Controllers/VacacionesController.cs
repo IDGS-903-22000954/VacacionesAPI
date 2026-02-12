@@ -23,5 +23,14 @@ namespace VacacionesBancodeAlimentos.Controllers
             var Vacaciones = await _context.Vacaciones.ToListAsync();
             return Ok(Vacaciones);
         }
+
+        [HttpGet]
+        [Route("GetVacacionesArmadas")]
+        public async Task<IActionResult> GetVacacionesArmadas()
+        {
+            var data = await _context.Vacaciones.ToListAsync();
+            return Ok(data);
+        }
+
     }
 }

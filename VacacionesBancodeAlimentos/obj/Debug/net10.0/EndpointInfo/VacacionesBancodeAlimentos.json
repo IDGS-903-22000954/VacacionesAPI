@@ -100,6 +100,48 @@
         }
       }
     },
+    "/api/Diccionario/PutDiccionario/{id}": {
+      "put": {
+        "tags": [
+          "Diccionario"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Diccionario/DeleteDiccionario/{id}": {
       "delete": {
         "tags": [
@@ -232,6 +274,42 @@
       "get": {
         "tags": [
           "Vacaciones"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Views/Dpt": {
+      "get": {
+        "tags": [
+          "Views"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Views/Emp": {
+      "get": {
+        "tags": [
+          "Views"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Views/Pst": {
+      "get": {
+        "tags": [
+          "Views"
         ],
         "responses": {
           "200": {
@@ -470,6 +548,9 @@
     },
     {
       "name": "Vacaciones"
+    },
+    {
+      "name": "Views"
     }
   ]
 }
