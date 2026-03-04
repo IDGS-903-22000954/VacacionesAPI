@@ -9,15 +9,15 @@ namespace VacacionesBancodeAlimentos.Model
         [Key]
         [Required]
         [Column("empleadoId")]
-        public int IdEmpleado { get; set; }
+        public string IdEmpleado { get; set; }
         [Required]
-        [Column("anio")]
-        public int Anio { get; set; }
+        [Column("periodo")]
+        public int Periodo { get; set; }
         [Required]
         [Column("diasTotales")]
         public int DiasTotales { get; set; }
-
-        [ForeignKey("IdEmpleado")]
-        public Empleado? Empleado { get; set; }
+        [Required]
+        [Column("diasRestantes")]
+        public int DiasRestantes { get; set; }
     }
 }

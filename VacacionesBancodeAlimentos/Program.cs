@@ -1,11 +1,15 @@
  using Microsoft.EntityFrameworkCore;
 using VacacionesBancodeAlimentos.Context;
+using VacacionesBancodeAlimentos.Interfaces;
+using VacacionesBancodeAlimentos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("BDVacaciones");
 
+// Program.cs
+builder.Services.AddScoped<IEmpleadoAntiguedadService, EmpleadoAntiguedadService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BDVacaciones")));
 builder.Services.AddDbContext<ViewsDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ctBANOM")));
 builder.Services.AddControllers();

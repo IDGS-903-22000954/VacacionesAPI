@@ -5,6 +5,30 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Antiguedad/fechasRandom": {
+      "post": {
+        "tags": [
+          "Antiguedad"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Antiguedad/antiguedadGeneral": {
+      "post": {
+        "tags": [
+          "Antiguedad"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Calculo/GetCalculo": {
       "get": {
         "tags": [
@@ -165,6 +189,40 @@
         }
       }
     },
+    "/api/Empleado/GetEmpleados": {
+      "get": {
+        "tags": [
+          "Empleado"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Empleado/GetEmpleado/{id}": {
+      "get": {
+        "tags": [
+          "Empleado"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Solicitud/GetSolicitudes": {
       "get": {
         "tags": [
@@ -177,7 +235,19 @@
         }
       }
     },
-    "/api/Solicitud/NewSolicitud": {
+    "/api/Solicitud/GetPendientes": {
+      "get": {
+        "tags": [
+          "Solicitud"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Solicitud/PostSolicitud": {
       "post": {
         "tags": [
           "Solicitud"
@@ -208,8 +278,8 @@
         }
       }
     },
-    "/api/Solicitud/UpdateSolicitud/{id}/{estatus}": {
-      "put": {
+    "/api/Solicitud/CancelarSolicitud/{id}": {
+      "delete": {
         "tags": [
           "Solicitud"
         ],
@@ -221,14 +291,6 @@
             "schema": {
               "type": "integer",
               "format": "int32"
-            }
-          },
-          {
-            "name": "estatus",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -239,7 +301,7 @@
         }
       }
     },
-    "/api/Solicitud/UpdateFormato/{id}/{formato}": {
+    "/api/Solicitud/AceptarSolicitud/{id}": {
       "put": {
         "tags": [
           "Solicitud"
@@ -253,16 +315,28 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "formato",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "formato": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "formato": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -274,42 +348,6 @@
       "get": {
         "tags": [
           "Vacaciones"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Views/Dpt": {
-      "get": {
-        "tags": [
-          "Views"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Views/Emp": {
-      "get": {
-        "tags": [
-          "Views"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Views/Pst": {
-      "get": {
-        "tags": [
-          "Views"
         ],
         "responses": {
           "200": {
@@ -400,52 +438,6 @@
         },
         "additionalProperties": false
       },
-      "Empleado": {
-        "type": "object",
-        "properties": {
-          "idEmpleado": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nombre": {
-            "maxLength": 100,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "puesto": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "departamento": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "fechaIngreso": {
-            "type": "string",
-            "format": "date"
-          },
-          "vacaciones": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Vacaciones"
-            },
-            "nullable": true
-          },
-          "solicitud": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Solicitud"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "Solicitud": {
         "required": [
           "estatus",
@@ -460,8 +452,8 @@
             "format": "int32"
           },
           "idEmpleado": {
-            "type": "integer",
-            "format": "int32"
+            "minLength": 1,
+            "type": "string"
           },
           "formato": {
             "type": "string",
@@ -472,10 +464,10 @@
           },
           "fechaPeticion": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
           },
           "empleado": {
-            "$ref": "#/components/schemas/Empleado"
+            "$ref": "#/components/schemas/V_EmpleadosNominas"
           },
           "solicitudFechas": {
             "type": "array",
@@ -490,46 +482,72 @@
       "SolicitudFecha": {
         "required": [
           "fecha",
-          "idSolicitud"
+          "idFecha",
+          "solicitudId"
         ],
         "type": "object",
         "properties": {
-          "idSolicitud": {
+          "idFecha": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "solicitudId": {
             "type": "integer",
             "format": "int32"
           },
           "fecha": {
             "type": "string",
-            "format": "date"
-          },
-          "solicitud": {
-            "$ref": "#/components/schemas/Solicitud"
+            "format": "date-time"
           }
         },
         "additionalProperties": false
       },
-      "Vacaciones": {
-        "required": [
-          "anio",
-          "diasTotales",
-          "idEmpleado"
-        ],
+      "V_EmpleadosNominas": {
         "type": "object",
         "properties": {
-          "idEmpleado": {
+          "codigoEmpleado": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombre": {
+            "type": "string",
+            "nullable": true
+          },
+          "apellidoPaterno": {
+            "type": "string",
+            "nullable": true
+          },
+          "apellidoMaterno": {
+            "type": "string",
+            "nullable": true
+          },
+          "idPuesto": {
             "type": "integer",
             "format": "int32"
           },
-          "anio": {
+          "puesto": {
+            "type": "string",
+            "nullable": true
+          },
+          "idDepartamento": {
             "type": "integer",
             "format": "int32"
           },
-          "diasTotales": {
-            "type": "integer",
-            "format": "int32"
+          "dpto": {
+            "type": "string",
+            "nullable": true
           },
-          "empleado": {
-            "$ref": "#/components/schemas/Empleado"
+          "fechaAlta": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaReingreso": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tipoContrato": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -538,19 +556,22 @@
   },
   "tags": [
     {
+      "name": "Antiguedad"
+    },
+    {
       "name": "Calculo"
     },
     {
       "name": "Diccionario"
     },
     {
+      "name": "Empleado"
+    },
+    {
       "name": "Solicitud"
     },
     {
       "name": "Vacaciones"
-    },
-    {
-      "name": "Views"
     }
   ]
 }

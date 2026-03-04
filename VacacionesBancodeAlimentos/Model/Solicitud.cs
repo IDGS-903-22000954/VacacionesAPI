@@ -12,7 +12,7 @@ namespace VacacionesBancodeAlimentos.Model
         public int IdSolicitud { get; set; }
         [Required]
         [Column("empleadoId")]
-        public int IdEmpleado { get; set; }
+        public string IdEmpleado { get; set; }
         [Column("formato")]
         public string Formato { get; set; }
         [Required]
@@ -20,10 +20,10 @@ namespace VacacionesBancodeAlimentos.Model
         public char Estatus { get; set; }
         [Required]
         [Column("fechaPeticion")]
-        public DateOnly FechaPeticion {  get; set; }
+        public DateTime FechaPeticion {  get; set; }
 
         [ForeignKey("IdEmpleado")]
-        public Empleado? Empleado { get; set; }
+        public V_EmpleadosNominas? Empleado { get; set; }
 
         public ICollection<SolicitudFecha> SolicitudFechas { get; set; }
 

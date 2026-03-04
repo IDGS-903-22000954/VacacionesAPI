@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace VacacionesBancodeAlimentos.Model
 {
@@ -8,13 +9,17 @@ namespace VacacionesBancodeAlimentos.Model
     {
         [Key]
         [Required]
+        [Column("idFecha")]
+        public int IdFecha {  get; set; }
+        [Required]
         [Column("solicitudId")]
-        public int IdSolicitud {  get; set; }
+        public int SolicitudId { get; set; }
         [Required]
         [Column("fecha")]
-        public DateOnly Fecha { get; set; }
+        public DateTime Fecha { get; set; }
+        [JsonIgnore]
 
-        [ForeignKey("IdSolicitud")]
+        [ForeignKey("SolicitudId")]
         public Solicitud? Solicitud { get; set; }
     }
 }

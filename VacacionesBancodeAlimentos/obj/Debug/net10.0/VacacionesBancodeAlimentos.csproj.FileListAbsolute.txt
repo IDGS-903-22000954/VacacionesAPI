@@ -161,3 +161,4 @@ Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\Vacac
 Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\VacacionesBancodeAlimentos.genruntimeconfig.cache
 Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\ref\VacacionesBancodeAlimentos.dll
 Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\obj\Debug\net10.0\VacacionesBancodeAlimentos.sourcelink.json
+Z:\VacacionesBancodeAlimentos\VacacionesBancodeAlimentos\bin\Debug\net10.0\Dapper.dll

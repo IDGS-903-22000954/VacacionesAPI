@@ -1,5 +1,25 @@
 [
   {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.AntiguedadController",
+    "Method": "General",
+    "RelativePath": "api/Antiguedad/antiguedadGeneral",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.AntiguedadController",
+    "Method": "Random",
+    "RelativePath": "api/Antiguedad/fechasRandom",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.CalculoController",
     "Method": "Get",
     "RelativePath": "api/Calculo/GetCalculo",
@@ -89,6 +109,79 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.EmpleadoController",
+    "Method": "GetEmpleadoDetalle",
+    "RelativePath": "api/Empleado/GetEmpleado/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.EmpleadoController",
+    "Method": "GetAllEmpleado",
+    "RelativePath": "api/Empleado/GetEmpleados",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "UpdateFormato",
+    "RelativePath": "api/Solicitud/AceptarSolicitud/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "formato",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "UpdateSolicitud",
+    "RelativePath": "api/Solicitud/CancelarSolicitud/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "Pendientes",
+    "RelativePath": "api/Solicitud/GetPendientes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
     "Method": "Get",
     "RelativePath": "api/Solicitud/GetSolicitudes",
@@ -101,7 +194,7 @@
   {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
     "Method": "NewSolicitud",
-    "RelativePath": "api/Solicitud/NewSolicitud",
+    "RelativePath": "api/Solicitud/PostSolicitud",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -115,81 +208,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
-    "Method": "UpdateFormato",
-    "RelativePath": "api/Solicitud/UpdateFormato/{id}/{formato}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "formato",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
-    "Method": "UpdateSolicitud",
-    "RelativePath": "api/Solicitud/UpdateSolicitud/{id}/{estatus}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "estatus",
-        "Type": "System.Char",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.VacacionesController",
     "Method": "GetVacaciones",
     "RelativePath": "api/Vacaciones/GetVacaciones",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VacacionesBancodeAlimentos.Controllers.ViewsController",
-    "Method": "Dpt",
-    "RelativePath": "api/Views/Dpt",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VacacionesBancodeAlimentos.Controllers.ViewsController",
-    "Method": "Emp",
-    "RelativePath": "api/Views/Emp",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VacacionesBancodeAlimentos.Controllers.ViewsController",
-    "Method": "Pst",
-    "RelativePath": "api/Views/Pst",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
