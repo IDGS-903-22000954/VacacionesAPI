@@ -151,5 +151,30 @@ namespace VacacionesBancodeAlimentos.Controllers
                 return StatusCode(500, $"Error: {ex.Message}");
             }
         }
+
+        [HttpGet]
+        [Route("DescargarSolicitud/{formato}")]
+        public async Task<IActionResult> DescargarSolicitud(string formato)
+        {
+            try
+            {
+                string rootPath = AppContext.BaseDirectory;
+                string carpetaDestino = Path.Combine(rootPath, "DocumentosSolicitudes");
+                string rutaCompleta = Path.Combine(carpetaDestino, formato);
+
+                if (!System.IO.File.Exists(rutaCompleta))
+                {
+                    return NotFound("El archivo PDF no se encuentra en el servidor.");
+                }
+
+                var bytes = await System.IO.File.ReadAllBytesAsync(rutaCompleta);
+
+                return File(bytes, "application/pdf", formato);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al intentar descargar el archivo: {ex.Message}");
+            }
+        }
     }
 }

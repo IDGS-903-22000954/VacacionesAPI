@@ -173,6 +173,22 @@
   },
   {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
+    "Method": "DescargarSolicitud",
+    "RelativePath": "api/Solicitud/DescargarSolicitud/{formato}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "formato",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.SolicitudController",
     "Method": "Pendientes",
     "RelativePath": "api/Solicitud/GetPendientes",
     "HttpMethod": "GET",

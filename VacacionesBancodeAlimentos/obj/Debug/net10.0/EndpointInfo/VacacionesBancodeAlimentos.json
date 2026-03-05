@@ -344,6 +344,28 @@
         }
       }
     },
+    "/api/Solicitud/DescargarSolicitud/{formato}": {
+      "get": {
+        "tags": [
+          "Solicitud"
+        ],
+        "parameters": [
+          {
+            "name": "formato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Vacaciones/GetVacaciones": {
       "get": {
         "tags": [
