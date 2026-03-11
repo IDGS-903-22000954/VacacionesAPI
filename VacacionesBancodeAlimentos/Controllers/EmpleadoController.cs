@@ -74,6 +74,7 @@ namespace VacacionesBancodeAlimentos.Controllers
                     NombreCompleto = $"{emp.Nombre} {emp.ApellidoPaterno} {emp.ApellidoMaterno}",
                     Puesto = emp.Puesto,
                     Departamento = emp.Dpto,
+                    CodigoLider = emp.CodigoLider,
                     FechaContrato = tieneAntiguedad ? infoAnt.FechaContrato : DateTime.MinValue,
                     Antiguedad = tieneAntiguedad ? infoAnt.Antiguedad : 0,
 
@@ -127,6 +128,7 @@ namespace VacacionesBancodeAlimentos.Controllers
                 NombreCompleto = $"{emp.Nombre} {emp.ApellidoPaterno} {emp.ApellidoMaterno}",
                 Puesto = emp.Puesto,
                 Departamento = emp.Dpto,
+                CodigoLider = emp.CodigoLider,
                 FechaContrato = antiguedad?.FechaContrato,
                 AntiguedadAnios = antiguedad?.Antiguedad,
 
@@ -139,7 +141,9 @@ namespace VacacionesBancodeAlimentos.Controllers
                 }),
 
                 // Mapeo de solicitudes con su detalle de fechas
-                HistoricoSolicitudes = solicitudesHistoricas.Select(s => new {
+                HistoricoSolicitudes = solicitudesHistoricas
+                .Where(s => !string.IsNullOrEmpty(s.Formato))
+                .Select(s => new {
                     s.IdSolicitud,
                     s.FechaPeticion,
                     s.Estatus, // p=pendiente, a=aprobado, c=cancelado

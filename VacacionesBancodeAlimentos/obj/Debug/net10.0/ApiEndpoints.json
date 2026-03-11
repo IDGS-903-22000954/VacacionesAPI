@@ -1,6 +1,27 @@
 [
   {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.AntiguedadController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Antiguedad/actualizarAntiguedad/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fecha",
+        "Type": "System.DateTime",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.AntiguedadController",
     "Method": "General",
     "RelativePath": "api/Antiguedad/antiguedadGeneral",
     "HttpMethod": "POST",
@@ -132,6 +153,32 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.PaginaController",
+    "Method": "Get",
+    "RelativePath": "api/Pagina",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.PaginaController",
+    "Method": "Put",
+    "RelativePath": "api/Pagina",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ruta",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

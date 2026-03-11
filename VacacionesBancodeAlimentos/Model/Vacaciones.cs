@@ -19,5 +19,8 @@ namespace VacacionesBancodeAlimentos.Model
         [Required]
         [Column("diasRestantes")]
         public int DiasRestantes { get; set; }
+        [Required]
+        [Column("diasDevueltos")]
+        public int DiasDevueltos { get; set; }
     }
 }

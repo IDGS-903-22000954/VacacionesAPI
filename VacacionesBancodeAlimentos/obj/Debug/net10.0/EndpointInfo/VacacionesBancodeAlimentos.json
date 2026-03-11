@@ -29,6 +29,50 @@
         }
       }
     },
+    "/api/Antiguedad/actualizarAntiguedad/{id}": {
+      "put": {
+        "tags": [
+          "Antiguedad"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Calculo/GetCalculo": {
       "get": {
         "tags": [
@@ -216,6 +260,47 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Pagina": {
+      "get": {
+        "tags": [
+          "Pagina"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pagina"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -465,7 +550,8 @@
           "estatus",
           "fechaPeticion",
           "idEmpleado",
-          "idSolicitud"
+          "idSolicitud",
+          "periodo"
         ],
         "type": "object",
         "properties": {
@@ -487,6 +573,10 @@
           "fechaPeticion": {
             "type": "string",
             "format": "date-time"
+          },
+          "periodo": {
+            "type": "integer",
+            "format": "int32"
           },
           "empleado": {
             "$ref": "#/components/schemas/V_EmpleadosNominas"
@@ -567,6 +657,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "codigoLider": {
+            "type": "string",
+            "nullable": true
+          },
           "tipoContrato": {
             "type": "string",
             "nullable": true
@@ -588,6 +682,9 @@
     },
     {
       "name": "Empleado"
+    },
+    {
+      "name": "Pagina"
     },
     {
       "name": "Solicitud"

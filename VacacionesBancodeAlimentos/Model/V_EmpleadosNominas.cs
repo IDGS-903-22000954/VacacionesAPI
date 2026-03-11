@@ -15,6 +15,7 @@ namespace VacacionesBancodeAlimentos.Model
         public string Dpto { get; set; }
         public DateTime FechaAlta { get; set; }
         public DateTime FechaReingreso { get; set; }
+        public string? CodigoLider { get; set; }
         public string TipoContrato { get; set; }
 
     }

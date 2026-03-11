@@ -77,12 +77,13 @@ namespace VacacionesBancodeAlimentos.Services
                         id = registro.EmpleadoId
                     });
 
-                    string sqlVacacion = @"INSERT INTO vacaciones (empleadoId, periodo, diasTotales, diasRestantes) VALUES (@id, @periodo, @dias, @dias)";
+                    string sqlVacacion = @"INSERT INTO vacaciones (empleadoId, periodo, diasTotales, diasRestantes, diasDevueltos) VALUES (@id, @periodo, @dias, @dias, @devueltos)";
                     await db.ExecuteAsync(sqlVacacion, new
                     {
                         id = registro.EmpleadoId,
                         periodo = fechaHoy.Year + 1,
-                        dias = diasAsignados
+                        dias = diasAsignados,
+                        devueltos = 0
                     });
 
                     Console.WriteLine($"Empleado {registro.EmpleadoId} actualizado a {antiguedadCalculada} años.");

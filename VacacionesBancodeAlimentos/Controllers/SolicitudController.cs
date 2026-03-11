@@ -66,15 +66,44 @@ namespace VacacionesBancodeAlimentos.Controllers
         [Route("CancelarSolicitud/{id:int}")]
         public async Task<IActionResult> UpdateSolicitud(int id)
         {
-            var Solicitud = await _appContext.Solicitudes.FindAsync(id);
-            if (Solicitud == null)
-            {
-                return NotFound();
-            }
-            Solicitud.Estatus = 'c';
-            await _appContext.SaveChangesAsync();
+            var solicitud = await _appContext.Solicitudes
+                .Include(s => s.SolicitudFechas)
+                .FirstOrDefaultAsync(s => s.IdSolicitud == id);
 
-            return Ok("Se ha actualizado la solicitud con éxito");
+            if (solicitud == null) return NotFound("Solicitud no encontrada.");
+
+            if (solicitud.Estatus == 'c') return BadRequest("La solicitud ya está cancelada.");
+
+            try
+            {
+                if (solicitud.Estatus == 'a')
+                {
+                    int diasARestaurar = solicitud.SolicitudFechas.Count;
+
+                    var registroVacaciones = await _appContext.Vacaciones
+                        .Where(v => v.IdEmpleado == solicitud.IdEmpleado)
+                        .OrderByDescending(v => v.Periodo)
+                        .FirstOrDefaultAsync();
+
+                    if (registroVacaciones != null)
+                    {
+                        registroVacaciones.DiasDevueltos += diasARestaurar;
+
+                        _appContext.Vacaciones.Update(registroVacaciones);
+                    }
+                }
+
+                solicitud.Estatus = 'c';
+                _appContext.Solicitudes.Update(solicitud);
+
+                await _appContext.SaveChangesAsync();
+
+                return Ok("Solicitud cancelada con éxito.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
         }
 
         [HttpPut]

@@ -6,7 +6,7 @@
     public string Departamento { get; set; }
     public DateTime FechaContrato { get; set; }
     public int Antiguedad { get; set; }
-    // Aquí anidamos la lista de vacaciones
+    public string? CodigoLider { get; set; }
     public List<VacacionesDto> PeriodosVacaciones { get; set; }
     public DateTime? FechaPeticion { get; set; }
 }
@@ -16,4 +16,5 @@ public class VacacionesDto
     public int Periodo { get; set; }
     public int DiasTotales { get; set; }
     public int DiasRestantes { get; set; }
+    public int DiasDevueltos { get; set; }
 }

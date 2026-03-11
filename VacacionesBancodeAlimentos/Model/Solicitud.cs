@@ -21,6 +21,9 @@ namespace VacacionesBancodeAlimentos.Model
         [Required]
         [Column("fechaPeticion")]
         public DateTime FechaPeticion {  get; set; }
+        [Required]
+        [Column("periodo")]
+        public int Periodo { get; set; }
 
         [ForeignKey("IdEmpleado")]
         public V_EmpleadosNominas? Empleado { get; set; }
