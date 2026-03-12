@@ -286,17 +286,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "string"
+                "$ref": "#/components/schemas/PaginaDto"
               }
             },
             "text/json": {
               "schema": {
-                "type": "string"
+                "$ref": "#/components/schemas/PaginaDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "string"
+                "$ref": "#/components/schemas/PaginaDto"
               }
             }
           }
@@ -540,6 +540,16 @@
             "items": {
               "$ref": "#/components/schemas/AsuetosFechas"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaginaDto": {
+        "type": "object",
+        "properties": {
+          "ruta": {
+            "type": "string",
             "nullable": true
           }
         },

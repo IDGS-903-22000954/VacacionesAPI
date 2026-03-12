@@ -120,6 +120,43 @@ namespace VacacionesBancodeAlimentos.Controllers
 
             try
             {
+                int diasSolicitados = solicitud.SolicitudFechas.Count;
+                DateTime fechaActual = DateTime.Now;
+
+                // 1. Obtener periodos que tengan días disponibles (Restantes + Devueltos)
+                var periodosVigentes = await _appContext.Vacaciones
+                    .Where(v => v.IdEmpleado == solicitud.IdEmpleado && (v.DiasRestantes > 0 || v.DiasDevueltos > 0))
+                    .OrderBy(v => v.Periodo)
+                    .ToListAsync();
+
+                // 2. Calcular el saldo total sumando solo lo que no ha caducado (18 meses)
+                int saldoTotalDisponible = 0;
+                var periodosAptosParaDescuento = new List<Vacaciones>();
+
+                foreach (var p in periodosVigentes)
+                {
+                    // Calculamos vigencia: 1 año y 6 meses desde el inicio del periodo
+                    DateTime inicioPeriodo = new DateTime(p.Periodo, 1, 1);
+                    DateTime finVigencia = inicioPeriodo.AddMonths(18);
+
+                    if (fechaActual <= finVigencia)
+                    {
+                        saldoTotalDisponible += (p.DiasRestantes + p.DiasDevueltos);
+                        periodosAptosParaDescuento.Add(p);
+                    }
+                }
+
+                // 3. Validar si los días solicitados exceden el saldo total
+                if (diasSolicitados > saldoTotalDisponible)
+                {
+                    return BadRequest(new
+                    {
+                        error = "Días insuficientes",
+                        mensaje = $"El empleado solo cuenta con {saldoTotalDisponible} días disponibles (incluyendo periodos anteriores vigentes), pero solicita {diasSolicitados}."
+                    });
+                }
+
+                // 4. Si pasa la validación, procedemos a guardar el archivo
                 string rootPath = AppContext.BaseDirectory;
                 string carpetaDestino = Path.Combine(rootPath, "DocumentosSolicitudes");
                 if (!Directory.Exists(carpetaDestino)) Directory.CreateDirectory(carpetaDestino);
@@ -134,21 +171,29 @@ namespace VacacionesBancodeAlimentos.Controllers
                     await formato.CopyToAsync(stream);
                 }
 
-                int diasPorDescontar = solicitud.SolicitudFechas.Count;
-                DateTime fechaActual = DateTime.Now;
-
-                var periodosDisponibles = await _appContext.Vacaciones
-                    .Where(v => v.IdEmpleado == solicitud.IdEmpleado && v.DiasRestantes > 0)
-                    .OrderBy(v => v.Periodo)
-                    .ToListAsync();
-
-                foreach (var periodo in periodosDisponibles)
+                // 5. Descontar los días de los periodos aptos (Priorizando los más antiguos)
+                int diasPorDescontar = diasSolicitados;
+                foreach (var periodo in periodosAptosParaDescuento)
                 {
                     if (diasPorDescontar <= 0) break;
-                    DateTime inicioPeriodo = new DateTime(periodo.Periodo, 1, 1);
-                    DateTime finVigencia = inicioPeriodo.AddMonths(18);
-                    
-                    if (fechaActual <= finVigencia)
+
+                    // Primero descontamos de DiasDevueltos si existen
+                    if (periodo.DiasDevueltos > 0)
+                    {
+                        if (periodo.DiasDevueltos >= diasPorDescontar)
+                        {
+                            periodo.DiasDevueltos -= diasPorDescontar;
+                            diasPorDescontar = 0;
+                        }
+                        else
+                        {
+                            diasPorDescontar -= periodo.DiasDevueltos;
+                            periodo.DiasDevueltos = 0;
+                        }
+                    }
+
+                    // Si aún faltan días, descontamos de DiasRestantes
+                    if (diasPorDescontar > 0 && periodo.DiasRestantes > 0)
                     {
                         if (periodo.DiasRestantes >= diasPorDescontar)
                         {
@@ -164,20 +209,20 @@ namespace VacacionesBancodeAlimentos.Controllers
                 }
 
                 solicitud.Formato = nombreArchivo;
-                solicitud.Estatus = 'a';
+                solicitud.Estatus = 'a'; // Estatus Aceptado
 
                 await _appContext.SaveChangesAsync();
 
                 return Ok(new
                 {
                     mensaje = "Solicitud aprobada con éxito",
-                    diasPendientesPorAsignar = diasPorDescontar,
-                    archivo = nombreArchivo
+                    archivo = nombreArchivo,
+                    diasDescontados = diasSolicitados
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error: {ex.Message}");
+                return StatusCode(500, $"Error interno: {ex.Message}");
             }
         }
 

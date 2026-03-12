@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VacacionesBancodeAlimentos.Context;
+using VacacionesBancodeAlimentos.Model;
 
 namespace VacacionesBancodeAlimentos.Controllers
 {
@@ -23,14 +24,14 @@ namespace VacacionesBancodeAlimentos.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] string ruta)
+        public async Task<IActionResult> Put([FromBody] PaginaDto p)
         {
             var pagina = await _applicationDbContext.Pagina.FindAsync(1);
             if (pagina == null)
             {
                 return NotFound("");
             }
-            pagina.Ruta = ruta;
+            pagina.Ruta = p.Ruta;
 
             try
             {
@@ -42,5 +43,10 @@ namespace VacacionesBancodeAlimentos.Controllers
 
             return Ok("Pagina actualizada con éxito");
         }
+    }
+
+    public class RutaDto
+    {
+        public string Ruta { get; set; }
     }
 }

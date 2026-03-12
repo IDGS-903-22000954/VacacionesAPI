@@ -174,8 +174,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "ruta",
-        "Type": "System.String",
+        "Name": "p",
+        "Type": "PaginaDto",
         "IsRequired": true
       }
     ],
