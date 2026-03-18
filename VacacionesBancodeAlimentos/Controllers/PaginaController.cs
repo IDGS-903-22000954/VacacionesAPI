@@ -45,8 +45,4 @@ namespace VacacionesBancodeAlimentos.Controllers
         }
     }
 
-    public class RutaDto
-    {
-        public string Ruta { get; set; }
-    }
 }

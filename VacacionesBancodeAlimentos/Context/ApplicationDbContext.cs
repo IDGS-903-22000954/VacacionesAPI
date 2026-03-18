@@ -17,6 +17,7 @@ namespace VacacionesBancodeAlimentos.Context
         public DbSet<AsuetosFechas> AsuetosFechas { get; set; }
         public DbSet<AntiguedadEmpleados> AntiguedadEmpleados { get; set; }
         public DbSet<Pagina> Pagina { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,7 @@ namespace VacacionesBancodeAlimentos.Context
             modelBuilder.Entity<AsuetosFechas>().ToTable("asuetosFechas");
             modelBuilder.Entity<AntiguedadEmpleados>().ToTable("antiguedadEmpleados");
             modelBuilder.Entity<Pagina>().ToTable("pagina");
+            modelBuilder.Entity<Usuario>().ToTable("usuario");
         }
     }
 }

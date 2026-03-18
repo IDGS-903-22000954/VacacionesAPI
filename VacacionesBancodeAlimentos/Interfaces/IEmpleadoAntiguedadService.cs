@@ -1,8 +1,10 @@
-﻿namespace VacacionesBancodeAlimentos.Interfaces
+﻿using System.Data;
+
+namespace VacacionesBancodeAlimentos.Interfaces
 {
     public interface IEmpleadoAntiguedadService
     {
-        Task GenerarFechasPruebaAsync();
         Task ActualizarAntiguedadGeneralAsync();
+        Task ActualizarAntiguedadPorEmpleadoAsync(string id, IDbTransaction transaction);
     }
 }

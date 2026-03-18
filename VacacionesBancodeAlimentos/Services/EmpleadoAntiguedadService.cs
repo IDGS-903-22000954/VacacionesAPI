@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using System.Data;
 using VacacionesBancodeAlimentos.Interfaces;
 using VacacionesBancodeAlimentos.Model;
 
@@ -14,81 +15,86 @@ namespace VacacionesBancodeAlimentos.Services
             _config = config;
         }
 
-        //Script para generar fechas del contrato de forma aleatoria, unicamente para pruebas
-        public async Task GenerarFechasPruebaAsync()
-        {
-            // Cadenas de conexión desde appsettings.json
-            var connA = _config.GetConnectionString("ctBANOM"); 
-            var connB = _config.GetConnectionString("BDVacaciones");
-
-            using var dbA = new SqlConnection(connA);
-            using var dbB = new SqlConnection(connB);
-
-            // 1. Traemos los IDs del Servidor A
-            var ids = await dbA.QueryAsync<string>("SELECT codigoempleado FROM VW_EmpleadosNominas");
-
-            var rnd = new Random();
-            var datos = ids.Select(id => new {
-                Id = id,
-                Fecha = DateTime.Today.AddDays(-rnd.Next(365, 1825)), // Entre 1 y 5 años atrás
-                Antiguedad = 0
-            }).ToList();
-
-            // 2. Insertamos en el Servidor B
-            string sql = "INSERT INTO antiguedadEmpleados (EmpleadoId, fechaContrato, antiguedad) VALUES (@Id, @Fecha, @Antiguedad)";
-            await dbB.ExecuteAsync(sql, datos);
-        }
-
-        //Script para validar la antiguedad de todos los empleados y actualizarla 
         public async Task ActualizarAntiguedadGeneralAsync()
         {
-            var conn = _config.GetConnectionString("BDVacaciones");
-            using var db = new SqlConnection(conn);
+            var connString = _config.GetConnectionString("BDVacaciones");
+            using var db = new SqlConnection(connString);
+            await db.OpenAsync();
 
-            // Obtenemos los empleados
-            var listaAntiguedades = await db.QueryAsync<AntiguedadEmpleados>("SELECT * FROM antiguedadEmpleados");
-            var matriz = await db.QueryAsync<Calculo>("SELECT * FROM calculos");
-            var fechaHoy = DateTime.Today;
+            var empleadosIds = await db.QueryAsync<string>("SELECT empleadoId FROM antiguedadEmpleados");
 
-            foreach (var registro in listaAntiguedades)
+            foreach (var id in empleadosIds)
             {
-                // Cálculo preciso de años (Lógica de Aniversario)
-                int antiguedadCalculada = fechaHoy.Year - registro.FechaContrato.Year;
-
-                // Si la fecha de contrato ajustada al año actual es mayor a HOY, 
-                // significa que aún no cumple el año en el calendario actual.
-                if (registro.FechaContrato.Date > fechaHoy.AddYears(-antiguedadCalculada))
+                using var transaction = db.BeginTransaction();
+                try
                 {
-                    antiguedadCalculada--;
+                    await ActualizarAntiguedadPorEmpleadoAsync(id, transaction);
+                    transaction.Commit();
                 }
-
-                var rangoEncontrado = matriz.FirstOrDefault(m =>
-                    antiguedadCalculada >= m.AnioMin &&
-                    antiguedadCalculada <= m.AnioMax);
-                int diasAsignados = rangoEncontrado?.Dias ?? 0;
-
-                // Validación y Actualización
-                if (registro.Antiguedad != antiguedadCalculada)
+                catch (Exception ex)
                 {
-                    string sqlUpdate = @"UPDATE antiguedadEmpleados SET Antiguedad = @nuevaAntiguedad WHERE empleadoId = @id";
-                    await db.ExecuteAsync(sqlUpdate, new
-                    {
-                        nuevaAntiguedad = antiguedadCalculada,
-                        id = registro.EmpleadoId
-                    });
-
-                    string sqlVacacion = @"INSERT INTO vacaciones (empleadoId, periodo, diasTotales, diasRestantes, diasDevueltos) VALUES (@id, @periodo, @dias, @dias, @devueltos)";
-                    await db.ExecuteAsync(sqlVacacion, new
-                    {
-                        id = registro.EmpleadoId,
-                        periodo = fechaHoy.Year + 1,
-                        dias = diasAsignados,
-                        devueltos = 0
-                    });
-
-                    Console.WriteLine($"Empleado {registro.EmpleadoId} actualizado a {antiguedadCalculada} años.");
+                    transaction.Rollback();
+                    Console.WriteLine($"Error en empleado {id}: {ex.Message}");
                 }
             }
+        }
+
+        // MÉTODO INDIVIDUAL: La "Única Fuente de Verdad"
+        public async Task ActualizarAntiguedadPorEmpleadoAsync(string id, IDbTransaction transaction)
+        {
+            var db = transaction.Connection;
+            var fechaHoy = DateTime.Today;
+
+            var registro = await db.QueryFirstOrDefaultAsync<AntiguedadEmpleados>(
+                "SELECT * FROM antiguedadEmpleados WHERE empleadoId = @id", new { id }, transaction);
+
+            var matriz = await db.QueryAsync<Calculo>("SELECT * FROM calculos", transaction: transaction);
+
+            if (registro == null) return;
+
+            // Cálculo de aniversario
+            int antiguedadCalculada = fechaHoy.Year - registro.FechaContrato.Year;
+            if (registro.FechaContrato.Date > fechaHoy.AddYears(-antiguedadCalculada))
+                antiguedadCalculada--;
+
+            var rango = matriz.FirstOrDefault(m => antiguedadCalculada >= m.AnioMin && antiguedadCalculada <= m.AnioMax);
+            int diasNuevos = rango?.Dias ?? 0;
+
+            // El periodo es el año en que se genera el derecho (Aniversario)
+            int periodoActual = registro.FechaContrato.AddYears(antiguedadCalculada).Year;
+
+            // 1. Sincronizar tabla maestra
+            await db.ExecuteAsync(
+                "UPDATE antiguedadEmpleados SET Antiguedad = @ant WHERE empleadoId = @id",
+                new { ant = antiguedadCalculada, id }, transaction);
+
+            // 2. UPSERT Robusto en Vacaciones
+            // Explicación: Calculamos el uso actual (Totales - Restantes) y lo restamos al nuevo total.
+            // Usamos CASE para asegurar que diasRestantes nunca sea menor a 0 (por seguridad contable).
+            string sqlUpsert = @"
+            IF EXISTS (SELECT 1 FROM vacaciones WHERE empleadoId = @id AND periodo = @periodo)
+            BEGIN
+                UPDATE vacaciones 
+                SET 
+                    diasRestantes = CASE 
+                        WHEN (@dias - (diasTotales - diasRestantes)) < 0 THEN 0 
+                        ELSE (@dias - (diasTotales - diasRestantes)) 
+                    END,
+                    diasTotales = @dias
+                WHERE empleadoId = @id AND periodo = @periodo
+            END
+            ELSE
+            BEGIN
+                INSERT INTO vacaciones (empleadoId, periodo, diasTotales, diasRestantes, diasDevueltos)
+                VALUES (@id, @periodo, @dias, @dias, 0)
+            END";
+
+            await db.ExecuteAsync(sqlUpsert, new
+            {
+                id,
+                periodo = periodoActual,
+                dias = diasNuevos
+            }, transaction);
         }
     }
 }

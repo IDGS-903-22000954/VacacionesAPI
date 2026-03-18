@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Storage;
 using VacacionesBancodeAlimentos.Context;
 using VacacionesBancodeAlimentos.Interfaces;
 using VacacionesBancodeAlimentos.Model;
@@ -22,64 +24,59 @@ namespace VacacionesBancodeAlimentos.Controllers
         }
 
         [HttpPost]
-        [Route("fechasRandom")]
-        public async Task<IActionResult> Random()
-        {
-            await _empleadoService.GenerarFechasPruebaAsync();
-            return Ok("Fechas generadas");
-        }
-
-        [HttpPost]
         [Route("antiguedadGeneral")]
         public async Task<IActionResult> General()
         {
-            await _empleadoService.ActualizarAntiguedadGeneralAsync();
-            return Ok("Antiguedades actualizadas");
+            try
+            {
+                // Este proceso puede tardar si hay muchos empleados, 
+                // se recomienda correrlo de forma asíncrona o con un timeout largo.
+                await _empleadoService.ActualizarAntiguedadGeneralAsync();
+                return Ok(new { mensaje = "Proceso de actualización masiva finalizado." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error en el proceso general: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Route("actualizarAntiguedad/{id}")]
         public async Task<IActionResult> Actualizar([FromBody] DateTime fecha, string id)
         {
-            // Buscamos en ambas tablas
-            var antiguedad = await _applicationDbContext.AntiguedadEmpleados.FindAsync(id);
             var empleadoExistente = await _viewsContext.EmpleadosNominas.FindAsync(id);
+            if (empleadoExistente == null) return NotFound("El empleado no existe.");
 
-            // Si el empleado no existe en la vista/maestra de nómina, no podemos hacer nada
-            if (empleadoExistente == null)
-            {
-                return NotFound("El empleado no existe en el sistema de nómina.");
-            }
+            // Usamos el contexto de EF para la transacción
+            using var transaction = await _applicationDbContext.Database.BeginTransactionAsync();
 
             try
             {
+                var antiguedad = await _applicationDbContext.AntiguedadEmpleados.FindAsync(id);
+
                 if (antiguedad == null)
                 {
-                    // ESCENARIO: El registro NO existe en la tabla AntiguedadEmpleados. Lo CREAMOS.
-                    var nuevaAntiguedad = new AntiguedadEmpleados // Sustituye por el nombre real de tu clase modelo
-                    {
-                        EmpleadoId = id, // Asegúrate de asignar la llave primaria
-                        FechaContrato = fecha
-                    };
-
-                    _applicationDbContext.AntiguedadEmpleados.Add(nuevaAntiguedad);
+                    antiguedad = new AntiguedadEmpleados { EmpleadoId = id, FechaContrato = fecha };
+                    _applicationDbContext.AntiguedadEmpleados.Add(antiguedad);
                 }
                 else
                 {
-                    // ESCENARIO: El registro SÍ existe. Solo ACTUALIZAMOS.
                     antiguedad.FechaContrato = fecha;
                     _applicationDbContext.AntiguedadEmpleados.Update(antiguedad);
                 }
 
-                // Guardamos cambios y ejecutamos la lógica general
                 await _applicationDbContext.SaveChangesAsync();
-                await _empleadoService.ActualizarAntiguedadGeneralAsync();
 
-                return Ok(new { mensaje = "Fecha procesada con éxito" });
+                // Llamamos al servicio pasando la transacción de Dapper
+                await _empleadoService.ActualizarAntiguedadPorEmpleadoAsync(id, transaction.GetDbTransaction());
+
+                await transaction.CommitAsync();
+                return Ok(new { mensaje = "Proceso exitoso" });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error al procesar el registro.");
+                await transaction.RollbackAsync();
+                return StatusCode(500, "Error al procesar el registro.");
             }
         }
     }
