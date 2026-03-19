@@ -7,6 +7,26 @@
       "RelativeMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|solutionrelative:vacacionesbancodealimentos\\controllers\\empleadocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|z:\\vacacionesbancodealimentos\\vacacionesbancodealimentos\\model\\solicitud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|solutionrelative:vacacionesbancodealimentos\\model\\solicitud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|z:\\vacacionesbancodealimentos\\vacacionesbancodealimentos\\controllers\\solicitudcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|solutionrelative:vacacionesbancodealimentos\\controllers\\solicitudcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|z:\\vacacionesbancodealimentos\\vacacionesbancodealimentos\\controllers\\diccionariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|solutionrelative:vacacionesbancodealimentos\\controllers\\diccionariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|z:\\vacacionesbancodealimentos\\vacacionesbancodealimentos\\dtos\\empleadodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|solutionrelative:vacacionesbancodealimentos\\dtos\\empleadodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|z:\\vacacionesbancodealimentos\\vacacionesbancodealimentos\\model\\solicitudfecha.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|solutionrelative:vacacionesbancodealimentos\\model\\solicitudfecha.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|z:\\vacacionesbancodealimentos\\vacacionesbancodealimentos\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5214B49B-88D4-B0AD-E73E-B8937641476E}|VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos.csproj|solutionrelative:vacacionesbancodealimentos\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -30,8 +50,73 @@
       "DocumentGroups": [
         {
           "DockedWidth": 328,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DiccionarioController.cs",
+              "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Controllers\\DiccionarioController.cs",
+              "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\Controllers\\DiccionarioController.cs",
+              "ToolTip": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Controllers\\DiccionarioController.cs",
+              "RelativeToolTip": "VacacionesBancodeAlimentos\\Controllers\\DiccionarioController.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAkwEcAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T21:29:01.618Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EmpleadoDto.cs",
+              "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\DTOs\\EmpleadoDto.cs",
+              "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\DTOs\\EmpleadoDto.cs",
+              "ToolTip": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\DTOs\\EmpleadoDto.cs",
+              "RelativeToolTip": "VacacionesBancodeAlimentos\\DTOs\\EmpleadoDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T20:48:58.934Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SolicitudFecha.cs",
+              "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Model\\SolicitudFecha.cs",
+              "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\Model\\SolicitudFecha.cs",
+              "ToolTip": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Model\\SolicitudFecha.cs",
+              "RelativeToolTip": "VacacionesBancodeAlimentos\\Model\\SolicitudFecha.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAowBQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T20:40:38.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Solicitud.cs",
+              "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Model\\Solicitud.cs",
+              "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\Model\\Solicitud.cs",
+              "ToolTip": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Model\\Solicitud.cs",
+              "RelativeToolTip": "VacacionesBancodeAlimentos\\Model\\Solicitud.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAIwCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T20:40:31.046Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SolicitudController.cs",
+              "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Controllers\\SolicitudController.cs",
+              "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\Controllers\\SolicitudController.cs",
+              "ToolTip": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Controllers\\SolicitudController.cs",
+              "RelativeToolTip": "VacacionesBancodeAlimentos\\Controllers\\SolicitudController.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAmwOQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T16:51:53.355Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -40,14 +125,14 @@
               "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\Controllers\\EmpleadoController.cs",
               "ToolTip": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Controllers\\EmpleadoController.cs",
               "RelativeToolTip": "VacacionesBancodeAlimentos\\Controllers\\EmpleadoController.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwBwAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAIsAAAAAAAAAAADwv6kAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-18T21:03:58.004Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Program.cs",
               "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\Program.cs",
@@ -55,12 +140,11 @@
               "RelativeToolTip": "VacacionesBancodeAlimentos\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-18T18:41:53.442Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-18T18:41:53.442Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "UsuarioDto.cs",
               "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\DTOs\\UsuarioDto.cs",
               "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\DTOs\\UsuarioDto.cs",
@@ -68,12 +152,11 @@
               "RelativeToolTip": "VacacionesBancodeAlimentos\\DTOs\\UsuarioDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-18T17:56:00.209Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-18T17:56:00.209Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "appsettings.json",
               "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\appsettings.json",
               "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\appsettings.json",
@@ -81,12 +164,11 @@
               "RelativeToolTip": "VacacionesBancodeAlimentos\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-18T17:35:37.132Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-18T17:35:37.132Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "UsuarioController.cs",
               "DocumentMoniker": "Z:\\VacacionesBancodeAlimentos\\VacacionesBancodeAlimentos\\Controllers\\UsuarioController.cs",
               "RelativeDocumentMoniker": "VacacionesBancodeAlimentos\\Controllers\\UsuarioController.cs",
@@ -94,8 +176,7 @@
               "RelativeToolTip": "VacacionesBancodeAlimentos\\Controllers\\UsuarioController.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAUwBEAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-17T18:04:17.185Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-17T18:04:17.185Z"
             }
           ]
         }

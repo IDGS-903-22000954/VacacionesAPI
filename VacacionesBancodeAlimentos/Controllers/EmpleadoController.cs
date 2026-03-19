@@ -30,7 +30,6 @@ namespace VacacionesBancodeAlimentos.Controllers
         public async Task<IActionResult> GetAllEmpleado()
         {
             // Definimos el límite de utilidad (18 meses atrás)
-            int añoActual = DateTime.Now.Year;
             int añoMinimoUtil = DateTime.Now.AddMonths(-18).Year;
 
             // 1. Carga de datos masiva con filtros
@@ -38,20 +37,22 @@ namespace VacacionesBancodeAlimentos.Controllers
 
             var todasLasVacaciones = await _appContext.Vacaciones
                 .AsNoTracking()
-                .Where(v => v.DiasRestantes > 0 && v.Periodo >= añoMinimoUtil) // Solo traemos lo útil
+                .Where(v => v.DiasRestantes > 0 && v.Periodo >= añoMinimoUtil)
                 .ToListAsync();
 
             var todasLasAntiguedades = await _appContext.AntiguedadEmpleados.ToListAsync();
 
-            var todasLasSolicitudes = await _appContext.Solicitudes
-                .OrderByDescending(s => s.FechaPeticion)
+            // Traemos las solicitudes con sus fechas para calcular el último día disfrutado
+            // Filtramos por estatus 'a' (Aceptadas) para asegurar que sean vacaciones reales
+            var todasLasSolicitudesConFechas = await _appContext.Solicitudes
+                .Include(s => s.SolicitudFechas)
+                .AsNoTracking()
                 .ToListAsync();
 
             // 2. Lookup de Antigüedad
-            var antiguedadLookup = todasLasAntiguedades
-                .ToDictionary(a => a.EmpleadoId, a => a);
+            var antiguedadLookup = todasLasAntiguedades.ToDictionary(a => a.EmpleadoId, a => a);
 
-            // 3. Lookup de Vacaciones (Mapeo optimizado)
+            // 3. Lookup de Vacaciones
             var vacacionesLookup = todasLasVacaciones
                 .GroupBy(v => v.IdEmpleado.ToString().Trim())
                 .ToDictionary(g => g.Key, g => g.Select(v => new VacacionesDto
@@ -63,18 +64,32 @@ namespace VacacionesBancodeAlimentos.Controllers
                 .OrderByDescending(v => v.Periodo)
                 .ToList());
 
-            // 4. Lookup de Fechas de Petición
-            var fechasSolicitudLookup = todasLasSolicitudes
+            // 4. NUEVO: Lookup de Último Día de Vacaciones Disfrutado
+            // Buscamos en las solicitudes aceptadas la fecha más alta dentro de SolicitudFechas
+            var ultimoDiaDisfrutadoLookup = todasLasSolicitudesConFechas
+                .Where(s => s.Estatus == 'a') // Solo las aceptadas
+                .SelectMany(s => s.SolicitudFechas.Select(f => new { s.IdEmpleado, f.Fecha }))
+                .GroupBy(x => x.IdEmpleado)
+                .ToDictionary(
+                    g => g.Key,
+                    g => (DateTime?)g.Max(x => x.Fecha)
+                );
+
+            // 5. Lookup de Fechas de Petición (Última vez que solicitó, independientemente del estatus)
+            var fechasSolicitudLookup = todasLasSolicitudesConFechas
                 .GroupBy(s => s.IdEmpleado)
                 .ToDictionary(
                     g => g.Key,
                     g => (DateTime?)g.Max(s => s.FechaPeticion)
                 );
 
-            // 5. Construcción de respuesta
+            // 6. Construcción de respuesta
             var respuesta = todosLosNominas.Select(emp =>
             {
                 var tieneAntiguedad = antiguedadLookup.TryGetValue(emp.CodigoEmpleado, out var infoAnt);
+
+                // Intentamos obtener el último día disfrutado del lookup
+                ultimoDiaDisfrutadoLookup.TryGetValue(emp.CodigoEmpleado, out var ultimaFechaReal);
 
                 return new EmpleadoDetalleDto
                 {
@@ -86,14 +101,16 @@ namespace VacacionesBancodeAlimentos.Controllers
                     FechaContrato = tieneAntiguedad ? infoAnt.FechaContrato : DateTime.MinValue,
                     Antiguedad = tieneAntiguedad ? infoAnt.Antiguedad : 0,
 
-                    // Solo incluirá periodos vigentes con días > 0
                     PeriodosVacaciones = vacacionesLookup.ContainsKey(emp.CodigoEmpleado)
                                         ? vacacionesLookup[emp.CodigoEmpleado]
                                         : new List<VacacionesDto>(),
 
                     FechaPeticion = fechasSolicitudLookup.ContainsKey(emp.CodigoEmpleado)
                                     ? fechasSolicitudLookup[emp.CodigoEmpleado]
-                                    : null
+                                    : null,
+
+                    // Este es el nuevo campo solicitado
+                    UltimasVacaciones = ultimaFechaReal
                 };
             }).ToList();
 
@@ -104,14 +121,11 @@ namespace VacacionesBancodeAlimentos.Controllers
         [Route("GetEmpleado/{id}")]
         public async Task<IActionResult> GetEmpleadoDetalle(string id)
         {
-            // 1. Buscamos la información base en Nómina
             var emp = await _viewsContext.EmpleadosNominas
                 .FirstOrDefaultAsync(e => e.CodigoEmpleado == id);
 
             if (emp == null) return NotFound("Empleado no encontrado.");
 
-            // 2. Cargamos todo el histórico sin filtros de vigencia
-            // Usamos Include para traer las fechas de cada solicitud
             var vacacionesHistoricas = await _appContext.Vacaciones
                 .AsNoTracking()
                 .Where(v => v.IdEmpleado == id)
@@ -119,9 +133,9 @@ namespace VacacionesBancodeAlimentos.Controllers
                 .ToListAsync();
 
             var solicitudesHistoricas = await _appContext.Solicitudes
-                .Include(s => s.SolicitudFechas) // Trae el desglose de días de cada petición
+                .Include(s => s.SolicitudFechas)
                 .AsNoTracking()
-                .Where(s => s.IdEmpleado == id)
+                .Where(s => s.IdEmpleado == id && !string.IsNullOrEmpty(s.Formato)) // Filtro de formato
                 .OrderByDescending(s => s.FechaPeticion)
                 .ToListAsync();
 
@@ -129,33 +143,24 @@ namespace VacacionesBancodeAlimentos.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.EmpleadoId == id);
 
-            // 3. Mapeo al DTO de respuesta
             var respuesta = new
             {
-                CodigoEmpleado = emp.CodigoEmpleado,
                 NombreCompleto = $"{emp.Nombre} {emp.ApellidoPaterno} {emp.ApellidoMaterno}",
-                Puesto = emp.Puesto,
-                Departamento = emp.Dpto,
-                CodigoLider = emp.CodigoLider,
                 FechaContrato = antiguedad?.FechaContrato,
                 AntiguedadAnios = antiguedad?.Antiguedad,
 
-                // Mapeo de periodos
                 ResumenVacaciones = vacacionesHistoricas.Select(v => new {
                     v.Periodo,
                     v.DiasTotales,
-                    v.DiasRestantes,
-                    Estado = v.DiasRestantes == 0 ? "Agotado" : "Disponible"
+                    v.DiasRestantes
                 }),
 
-                // Mapeo de solicitudes con su detalle de fechas
-                HistoricoSolicitudes = solicitudesHistoricas
-                .Where(s => !string.IsNullOrEmpty(s.Formato))
-                .Select(s => new {
+                // Agregamos el campo Periodo aquí para que el frontend pueda agrupar
+                HistoricoSolicitudes = solicitudesHistoricas.Select(s => new {
                     s.IdSolicitud,
-                    s.FechaPeticion,
-                    s.Estatus, // p=pendiente, a=aprobado, c=cancelado
-                    s.Formato, // Nombre del archivo PDF
+                    s.Periodo, // Campo clave para el filtrado en React
+                    s.Estatus,
+                    s.Formato,
                     TotalDias = s.SolicitudFechas.Count,
                     DetalleFechas = s.SolicitudFechas.Select(f => f.Fecha).OrderBy(f => f)
                 })

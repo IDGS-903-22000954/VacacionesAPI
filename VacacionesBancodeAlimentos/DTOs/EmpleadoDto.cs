@@ -9,6 +9,7 @@
     public string? CodigoLider { get; set; }
     public List<VacacionesDto> PeriodosVacaciones { get; set; }
     public DateTime? FechaPeticion { get; set; }
+    public DateTime? UltimasVacaciones { get; set; }
 }
 
 public class VacacionesDto

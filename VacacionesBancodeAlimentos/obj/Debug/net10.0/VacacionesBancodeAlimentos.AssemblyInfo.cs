@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VacacionesBancodeAlimentos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d14cbbac46c79215cd5ddbea31fc26603dafb7e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d303fe00f1ae3b918d3ffd99e3289c204ca4c196")]
 [assembly: System.Reflection.AssemblyProductAttribute("VacacionesBancodeAlimentos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VacacionesBancodeAlimentos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

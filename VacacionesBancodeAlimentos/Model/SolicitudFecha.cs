@@ -17,8 +17,8 @@ namespace VacacionesBancodeAlimentos.Model
         [Required]
         [Column("fecha")]
         public DateTime Fecha { get; set; }
+        
         [JsonIgnore]
-
         [ForeignKey("SolicitudId")]
         public Solicitud? Solicitud { get; set; }
     }
