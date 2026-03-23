@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -8,6 +9,7 @@ using VacacionesBancodeAlimentos.Model;
 
 namespace VacacionesBancodeAlimentos.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AntiguedadController : ControllerBase

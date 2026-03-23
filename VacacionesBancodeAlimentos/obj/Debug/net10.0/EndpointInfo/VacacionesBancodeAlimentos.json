@@ -565,6 +565,18 @@
         }
       }
     },
+    "/api/Usuario/GenerarPase": {
+      "get": {
+        "tags": [
+          "Usuario"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Vacaciones/GetVacaciones": {
       "get": {
         "tags": [

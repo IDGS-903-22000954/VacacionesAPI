@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using VacacionesBancodeAlimentos.Context;
 using VacacionesBancodeAlimentos.Model;
@@ -79,7 +81,6 @@ namespace VacacionesBancodeAlimentos.Controllers
 
             try
             {
-                // 1. Configurar los parámetros de validación usando tu AppSettings
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
 
@@ -87,54 +88,51 @@ namespace VacacionesBancodeAlimentos.Controllers
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidIssuer = _config["Jwt:Issuer"],
-                    ValidateAudience = true,
-                    ValidAudience = _config["Jwt:Audience"],
-                    ValidateLifetime = true, // Aquí valida automáticamente la expiración
-                    ClockSkew = TimeSpan.Zero // Elimina el margen de gracia de 5 min por defecto
+
+                    // Ponemos estos en false para que no choquen con el token de la Intranet
+                    // pero mantenemos la seguridad mediante la firma de la llave (Key)
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
 
-                // 2. Validar Token (Si falla, lanza excepción)
+                // 2. Validar Token y obtener la identidad
                 var principal = tokenHandler.ValidateToken(loginDto.Token, validationParameters, out SecurityToken validatedToken);
 
-                // 3. Extraer el nombre del Token para comparar con el del Body
-                var nombreEnToken = principal.Identity?.Name;
-                // O si lo guardaste en un claim específico: 
-                // var nombreEnToken = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                // 3. Extraer el nombre buscando el claim específico de tipo Name
+                var nombreEnToken = principal.Claims.FirstOrDefault(c =>
+                    c.Type == ClaimTypes.Name || c.Type == "unique_name")?.Value;
 
-                if (nombreEnToken != loginDto.Nombre)
+                if (string.IsNullOrEmpty(nombreEnToken) || nombreEnToken != loginDto.Nombre)
                 {
-                    return Unauthorized(new { mensaje = "El nombre del token no coincide con el usuario proporcionado." });
+                    return Unauthorized(new { mensaje = "El nombre del token no coincide con el enviado." });
                 }
 
-                // 4. Buscar el usuario en TU base de datos de Vacaciones
+                // 4. Buscar usuario en tabla por nombre
                 var usuarioEnBD = await _appContext.Usuario
                     .FirstOrDefaultAsync(u => u.Nombre == loginDto.Nombre);
 
                 if (usuarioEnBD == null)
                 {
-                    return Unauthorized(new { mensaje = "El usuario está autenticado pero no tiene permisos en el sistema de Vacaciones." });
+                    return Unauthorized(new { mensaje = "Usuario no registrado en el sistema de Vacaciones." });
                 }
 
-                // 5. Sesión Creada Exitosamente
-                // Retornamos los datos del usuario y el rol para que el Frontend sepa qué mostrar
+                // 5. Sesión Exitosa
                 return Ok(new
                 {
                     mensaje = "Sesión iniciada correctamente",
                     usuario = usuarioEnBD.Nombre,
                     rol = usuarioEnBD.Rol,
                     departamento = usuarioEnBD.Departamento,
-                    token = loginDto.Token // El frontend usará este mismo para futuras peticiones
+                    token = loginDto.Token
                 });
-            }
-            catch (SecurityTokenExpiredException)
-            {
-                return Unauthorized(new { mensaje = "La sesión ha expirado. Por favor, inicie sesión de nuevo." });
             }
             catch (Exception ex)
             {
-                return Unauthorized(new { mensaje = "Token inválido o corrupto: " + ex.Message });
+                // Esto atrapará si el token está mal firmado o expirado
+                return Unauthorized(new { mensaje = "Token inválido: " + ex.Message });
             }
         }
 
@@ -164,6 +162,33 @@ namespace VacacionesBancodeAlimentos.Controllers
             {
                 return StatusCode(500, "Error al actualizar: " + ex.InnerException?.Message);
             }
+        }
+
+        // --- GENERADOR DE TOKEN FALSO ---
+        [HttpGet("GenerarPase")]
+        [AllowAnonymous]
+        public IActionResult GenerarPase()
+        {
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, "Cesar García"),
+            new Claim("SID", "S-1-5-21-3623811015-3361044348-30300820-1013")
+        };
+
+            var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes("BaLe0n-Intranet-2026-JWT-Key-Segura-01")
+            );
+            var creds = new Microsoft.IdentityModel.Tokens.SigningCredentials(key, Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: "IntranetAPI",
+                audience: "IntranetFrontend",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(60),
+                signingCredentials: creds
+            );
+
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
     }
 }

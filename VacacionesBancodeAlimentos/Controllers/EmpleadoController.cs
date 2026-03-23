@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VacacionesBancodeAlimentos.Context;
 
@@ -15,14 +16,6 @@ namespace VacacionesBancodeAlimentos.Controllers
         {
             _viewsContext = viewsContext;
             _appContext = appContext;
-        }
-
-        [HttpGet]
-        [Route("GetDepartamentos")]
-        public async Task<IActionResult> GetAllDepartamentos()
-        {
-            var departamentos = await _viewsContext.DepartamentosNominas.ToListAsync();
-            return Ok(departamentos);
         }
 
         [HttpGet]

@@ -319,6 +319,16 @@
   },
   {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.UsuarioController",
+    "Method": "GenerarPase",
+    "RelativePath": "api/Usuario/GenerarPase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VacacionesBancodeAlimentos.Controllers.UsuarioController",
     "Method": "Login",
     "RelativePath": "api/Usuario/login",
     "HttpMethod": "POST",

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VacacionesBancodeAlimentos.Context;
 
 namespace VacacionesBancodeAlimentos.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class VacacionesController : ControllerBase
