@@ -121,7 +121,7 @@
   },
   {
     "ContainingType": "VacacionesBancodeAlimentos.Controllers.EmpleadoController",
-    "Method": "GetAllDepartamentos",
+    "Method": "GetDepartamentos",
     "RelativePath": "api/Empleado/GetDepartamentos",
     "HttpMethod": "GET",
     "IsController": true,

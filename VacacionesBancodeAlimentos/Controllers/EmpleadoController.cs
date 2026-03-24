@@ -5,6 +5,7 @@ using VacacionesBancodeAlimentos.Context;
 
 namespace VacacionesBancodeAlimentos.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EmpleadoController : Controller
@@ -160,6 +161,15 @@ namespace VacacionesBancodeAlimentos.Controllers
             };
 
             return Ok(respuesta);
+        }
+
+        [HttpGet]
+        [Route("GetDepartamentos")]
+        public async Task<IActionResult> GetDepartamentos()
+        {
+            var departamentos = await _viewsContext.DepartamentosNominas.ToListAsync();
+
+            return Ok(departamentos);
         }
     }
 }

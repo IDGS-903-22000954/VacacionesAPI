@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -136,21 +137,35 @@ namespace VacacionesBancodeAlimentos.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Usuario usuario)
         {
+            var userIdToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                              ?? User.FindFirst("SID")?.Value;
+
+            if (string.IsNullOrEmpty(userIdToken))
+            {
+                return Unauthorized("No se pudo identificar al usuario de la sesión.");
+            }
+
+            if (id.ToString() == userIdToken)
+            {
+                return BadRequest("No tienes permitido modificar tu propia información de usuario.");
+            }
+
             if (id != usuario.IdUsuario)
             {
                 return BadRequest("El ID del usuario no coincide.");
             }
 
             var usuarioEnDb = await _appContext.Usuario.FindAsync(id);
-
             if (usuarioEnDb == null)
             {
                 return NotFound($"No se encontró el usuario con ID {id}.");
             }
 
+            // Actualización de valores
             _appContext.Entry(usuarioEnDb).CurrentValues.SetValues(usuario);
 
             try

@@ -221,18 +221,6 @@
         }
       }
     },
-    "/api/Empleado/GetDepartamentos": {
-      "get": {
-        "tags": [
-          "Empleado"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Empleado/GetEmpleados": {
       "get": {
         "tags": [
@@ -259,6 +247,18 @@
               "type": "string"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Empleado/GetDepartamentos": {
+      "get": {
+        "tags": [
+          "Empleado"
         ],
         "responses": {
           "200": {
