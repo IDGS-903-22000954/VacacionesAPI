@@ -27,6 +27,7 @@ namespace VacacionesBancodeAlimentos.Controllers
             _config = config;
         }
 
+        [Authorize+]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -49,6 +50,7 @@ namespace VacacionesBancodeAlimentos.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] UsuarioDto usuariodto)
         {
             if (usuariodto == null) return BadRequest("Los datos del usuario son nulos.");
@@ -74,11 +76,13 @@ namespace VacacionesBancodeAlimentos.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            if (string.IsNullOrEmpty(loginDto.Token) || string.IsNullOrEmpty(loginDto.Nombre))
-                return BadRequest("Token o nombre de usuario no proporcionados.");
+            // Validación de entrada
+            if (string.IsNullOrEmpty(loginDto.Token) || string.IsNullOrEmpty(loginDto.SID))
+                return BadRequest(new { mensaje = "Token o SID de usuario no proporcionados." });
 
             try
             {
@@ -89,38 +93,38 @@ namespace VacacionesBancodeAlimentos.Controllers
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-
-                    // Ponemos estos en false para que no choquen con el token de la Intranet
-                    // pero mantenemos la seguridad mediante la firma de la llave (Key)
                     ValidateIssuer = false,
                     ValidateAudience = false,
-
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
 
-                // 2. Validar Token y obtener la identidad
+                // Valida la firma y vigencia del token
                 var principal = tokenHandler.ValidateToken(loginDto.Token, validationParameters, out SecurityToken validatedToken);
 
-                // 3. Extraer el nombre buscando el claim específico de tipo Name
-                var nombreEnToken = principal.Claims.FirstOrDefault(c =>
-                    c.Type == ClaimTypes.Name || c.Type == "unique_name")?.Value;
+                // 1. Extraer el SID del Token decodificado
+                var sidEnToken = principal.Claims.FirstOrDefault(c =>
+                    c.Type == "SID" ||
+                    c.Type == ClaimTypes.Sid ||
+                    c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
 
-                if (string.IsNullOrEmpty(nombreEnToken) || nombreEnToken != loginDto.Nombre)
+                // 2. Validar consistencia (Que el SID del JSON coincida con el del Token)
+                if (string.IsNullOrEmpty(sidEnToken) || sidEnToken != loginDto.SID)
                 {
-                    return Unauthorized(new { mensaje = "El nombre del token no coincide con el enviado." });
+                    return Unauthorized(new { mensaje = "La identidad del usuario no coincide con el token enviado." });
                 }
 
-                // 4. Buscar usuario en tabla por nombre
+                // 3. Buscar usuario en la DB de Vacaciones usando el SID
+                // NOTA: Asegúrate que tu entidad Usuario tenga la columna SSID o SID
                 var usuarioEnBD = await _appContext.Usuario
-                    .FirstOrDefaultAsync(u => u.Nombre == loginDto.Nombre);
+                    .FirstOrDefaultAsync(u => u.SSID == loginDto.SID);
 
                 if (usuarioEnBD == null)
                 {
-                    return Unauthorized(new { mensaje = "Usuario no registrado en el sistema de Vacaciones." });
+                    return Unauthorized(new { mensaje = "Acceso denegado: El usuario no está registrado en el sistema de Vacaciones." });
                 }
 
-                // 5. Sesión Exitosa
+                // 4. Respuesta exitosa
                 return Ok(new
                 {
                     mensaje = "Sesión iniciada correctamente",
@@ -132,8 +136,7 @@ namespace VacacionesBancodeAlimentos.Controllers
             }
             catch (Exception ex)
             {
-                // Esto atrapará si el token está mal firmado o expirado
-                return Unauthorized(new { mensaje = "Token inválido: " + ex.Message });
+                return Unauthorized(new { mensaje = "Error de validación: " + ex.Message });
             }
         }
 
@@ -186,8 +189,8 @@ namespace VacacionesBancodeAlimentos.Controllers
         {
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, "Cesar García"),
-            new Claim("SID", "S-1-5-21-3623811015-3361044348-30300820-1013")
+            new Claim(ClaimTypes.Name, "Carlos Bodridoza"),
+            new Claim("SID", "S-1-5-21-3623811015-3361044348-30300820-1015")
         };
 
             var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(

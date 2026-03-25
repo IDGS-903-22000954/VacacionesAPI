@@ -674,6 +674,10 @@
       "LoginDto": {
         "type": "object",
         "properties": {
+          "sid": {
+            "type": "string",
+            "nullable": true
+          },
           "nombre": {
             "type": "string",
             "nullable": true
